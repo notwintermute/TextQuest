@@ -1,0 +1,313 @@
+#include <conio.h>
+#include <iostream>
+#include <time.h>
+#include <fstream>
+using namespace std;
+int markint, NPCint,row = 4, column = 0, rowN = 4, columnN = 3, healthint = 100, turn, healthPots,controlChoice;
+float version = 2.210;
+int cloudrow=1,cloudcolumn=1;
+char character;
+char key = ' ';
+//Display Level Function
+void displayLevel (string level[5][20]){
+     for(int a = 0 ; a < 5 ; a++){
+ for (int b = 0 ; b < 20 ; b++) {
+     cout << level[a][b] << " ";
+  }
+cout << endl;
+  }
+ }
+void sameLevel (string levelone[5][20], string leveltwo[5][20]){
+     for(int a = 0 ; a < 5 ; a++){
+ for (int b = 0 ; b < 20 ; b++) {
+     levelone[a][b]=leveltwo[a][b];
+  }
+cout << endl;
+  }
+}
+int main(){
+cout << "Type a letter, this will be your character." << endl;
+cin >> character;
+int getech = 3,currentlevel=1;
+bool boardmark=true,chat,right,left,sword,console=true;
+   string level1[5][20] ={"O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","T","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","Y" };
+                          
+  string level1b[5][20] ={"O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","T","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","Y" };
+                          
+   string level2[5][20] ={"O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",
+                          "O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O" };
+//Row then column
+while(boardmark==true){
+if(getech!=3){
+key = _getch();
+}
+getech++;
+if(key==97)
+{ markint = 1;}
+if(key==100)
+{ markint = 2;}
+if(key==119)
+{ markint = 3;}
+if(key==102)
+{ markint = 4;}
+if(key==113)
+{ markint = 5;}
+if(key==107)
+{ markint = 6;}
+if(key==108)
+{ markint = 7;}
+if(key==101)
+{ markint = 8;}
+if(key==104)
+{ markint = 9;}
+if(key==118)
+{ markint = 10;}
+srand(time(0));
+NPCint = 1 + rand() % 2;
+if(turn%3==0){
+switch(NPCint){
+//Left
+case 1:
+level1[rowN][columnN] = "O";
+columnN = columnN - 1;
+if(columnN<0){
+columnN=0;
+}
+if(columnN==2&&rowN==4){
+columnN=3;
+}
+break;
+//Right
+case 2:
+level1[rowN][columnN] = "O";
+columnN = columnN + 1;
+if(columnN>19){
+columnN=19;
+}
+if(columnN==2&&rowN==4){
+column=1;
+}
+break;    
+}
+}
+//End of npc switch statement
+switch(markint){
+//left
+case 1:
+level1[row][column] = "O";
+column = column - 1;
+
+if(column<0){
+             if(currentlevel==2){
+                                 currentlevel = 1;
+                                 sameLevel(level1,level1b);
+                                 column=19;
+                                 }
+             else{
+                  column=0;
+                  }
+             }
+if(column==2&&row==4&&currentlevel==1){
+                                       column=3;
+                                       }
+left=true;
+right=false;
+  
+break;
+//right
+case 2:
+level1[row][column] = "O";
+if(column!=39){
+               if(column!=19){
+                              if(level1[row][column+1]=="O"){
+                                                             column++;
+                                                             }
+                                                             }
+                                                             }
+                                                             
+if(column==20){
+                currentlevel=2;
+                sameLevel(level1,level2);
+                column=0;
+               }
+
+right=true;
+left=false;
+break;
+//Jump
+case 3:
+level1[row][column] = "O";
+if(row==4){
+           row = row - 2;
+           }
+if(row!=4){
+           if(level1[row+1][column]!="O"){
+                                          row = row - 2;
+                                          }
+}
+break;
+//Sword
+case 4:
+level1[row][column] = "O";
+if(right==true&&left==false){
+                             level1[row][column+1] = "-";
+                             sword=true;
+                            }
+if(left==true&&right==false){
+                             level1[row][column-1] = "-";
+                             sword=true;
+                             }
+break;
+//Pause
+case 5:
+system("cls");
+cout << "(1) Controls" << endl;
+cout << "(2) Quit    " << endl;
+cin  >> controlChoice;
+                    switch(controlChoice){
+     case 1:
+          system("cls");
+     cout << "WASD to move, F to Stab, E to talk." << endl;
+     cout << "K to decrease health, L to use health potion." << endl;
+     system("pause");
+     break;
+     case 2:
+     return 0;
+     break;
+     }
+break;
+//Health Add
+case 6:
+if(healthPots>0&&healthint<100){
+                               healthPots--;
+                               healthint = healthint + 20;
+                               }
+if(healthint>100){
+                  healthint=100;
+                  }
+break;
+//Health Minus
+
+case 7:
+// The input is k
+healthint--;
+if(healthint<1){
+                system("cls");
+                cout << "Game Over! You ran out of life." << endl;
+                system("pause");
+                return 0;
+                }
+break;
+//Chat
+case 8:
+chat = true;
+break;
+case 9:
+if(console==true){
+                 console=false;
+                 }
+else if(console==false){
+                       console=true;
+                       }
+ //Switch Statement End                      
+}
+//Chat with "Y" npc
+if(chat==true){
+               if(row==4&&column==18){
+                                      cout << "Hello!" << endl;
+                                      if(healthPots<5){
+                                                       cout << "I have this extra health potion, here take it" << endl;
+                                                       healthPots++;
+                                                       }
+                                                       else{
+                                                            cout << "You can only hold 5, sorry!                  " << endl;
+                                                            }
+                                      chat=false;    
+                                      }
+               }
+               
+if(row<4){
+          row++;
+          }
+          
+//Collisions midair
+          if(currentlevel==1){
+if(row==4&&column==2){
+                      row = 3;
+                      }
+if(row==4&&column==19){
+                       row=3;
+                       column=19;
+                       }
+                                 }
+system("cls");
+
+if(column>19){
+              currentlevel=2;
+              }
+
+//Level 1 Objects
+   if(currentlevel==1){
+                       level1[4][2] = "T";
+                       level1[4][19]= "Y";
+                       level1[rowN][columnN] = "X";
+   }
+   
+level1[row][column] = character;
+displayLevel(level1);
+if(markint==10){
+                if(right==true){
+                                cout << level1[row][column+1] << endl;
+                                }
+                else{
+                     cout << level1[row][column-1] << endl;
+                     }
+}
+ if(healthint>100){
+healthint=100;
+}
+ cout << "Health" << endl;
+ cout << healthint << endl;
+ cout << "Health Potions" << endl;
+ cout << healthPots << endl;
+//Sword Right
+if(sword==true&&right==true){
+level1[row][column+1] = "O";
+level1[row-1][column+1]= "O";
+sword=false;
+}
+//Sword Left
+if(sword==true&&left==true){
+level1[row][column-1] = "O";
+level1[row-1][column-1]= "O";
+sword=false;
+}
+cout << "Type 'q' for controls." << endl;
+if(console==true){
+//Console information
+cout << "Row = " << row << endl;
+cout << "Column = " << column << endl;
+cout << "Turn : " << turn << endl;
+cout << "Turn Modulus : " << turn % 3 << endl;
+cout << "Current Level : " << currentlevel << endl;
+cout << "Version : " << version << endl; 
+}
+if(console==false){
+cout << "Press 'H' to turn on console." << endl;
+}
+turn++;
+}
+system("pause");
+}
+//collision by detecting what is infront of the player
